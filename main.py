@@ -9,10 +9,10 @@ right_input = 0
 running = True
 
 data = pandas.read_csv("sampletxt.csv", on_bad_lines='skip')
-l = random.choice(data["Sampletext"])
+sample_text = random.choice(data["Sampletext"])
 
 def start(event):
-    sampletext.config(text=l)
+    sampletext.config(text=sample_text)
     window.unbind("<Button-1>")
     txt.config(state="normal")
     count_down(60)
@@ -38,15 +38,14 @@ def count_down(count):
     except ZeroDivisionError:
         formatted_cps_count = Decimal('0.00')
 
-
-    if  sampletext.cget('text') == input or count == 0:
+    if sampletext.cget('text') == input or count == 0:
         count = 0
         timer_label.config(text=f'Timer:\n{count}')
+        speed_label.config(text=f"Speed:\n{Decimal('0.00')} CPS")
         txt.config(state='disabled')
         wrong_words()
         sampletext.config(
             text=f'Your score is {formatted_cps_count}CPS\nWrong Characters:{wrong_input}\nRight Characters:{right_input}')
-
 
     elif count > 0:
         window.after(1000, count_down, count - 1)
@@ -57,31 +56,29 @@ def count_down(count):
 def wrong_words():
     global right_input
     global wrong_input
-    global l
+    global sample_text
     user_input = txt.get(1.0, "end-1c")
-    print(user_input)
-    string1_words = user_input.split()
-    print(string1_words)
-    string2_words = (l.split())
+    user_input_words = user_input.split()
+    sample_text_words = sample_text.split()
 
     try:
-        for i in range(len(string1_words)):
-            if string1_words[i] == string2_words[i]:
+        for i in range(len(user_input_words)):
+            if user_input_words[i] == sample_text_words[i]:
                 right_input += 1
-            elif string1_words[i] != string2_words[i]:
+            elif user_input_words[i] != sample_text_words[i]:
                 wrong_input += 1
     except IndexError:
         pass
 
 def restart():
     global running
-    global cps_count, wrong_input, right_input, string, l
+    global cps_count, wrong_input, right_input, sample_text
     running = True
     window.destroy()
     cps_count = 0
     wrong_input = 0
     right_input = 0
-    l = random.choice(data["Sampletext"])
+    sample_text = random.choice(data["Sampletext"])
 
 def quit():
     window.destroy()
@@ -116,8 +113,8 @@ while running:
     reset_button = Button(window, text="Reset", font=("Ariel", 10, "bold"), command=restart)
     reset_button.grid(row=4, column=2, padx=10, pady=10, sticky="W")
 
-    quit = Button(window, text="Quit", font=("Ariel", 10, "bold"), command=quit)
-    quit.grid(row=4, column=3, padx=10, pady=10, sticky="W")
+    quit_window = Button(window, text="Quit", font=("Ariel", 10, "bold"), command=quit)
+    quit_window.grid(row=4, column=3, padx=10, pady=10, sticky="W")
 
 
 
