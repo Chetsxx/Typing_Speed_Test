@@ -60,13 +60,13 @@ def wrong_words():
     user_input = txt.get(1.0, "end-1c")
     user_input_words = user_input.split()
     sample_text_words = sample_text.split()
-
+    wrong = [d for d in user_input_words if d not in sample_text_words]
+    right = [d for d in user_input_words if d in sample_text_words]
     try:
-        for i in range(len(user_input_words)):
-            if user_input_words[i] == sample_text_words[i]:
-                right_input += 1
-            elif user_input_words[i] != sample_text_words[i]:
-                wrong_input += 1
+        right_input = len(right)
+        wrong_input = len(wrong)
+        print(wrong_input)
+
     except IndexError:
         pass
 
